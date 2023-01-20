@@ -35,26 +35,13 @@ Ao enviar, deve-se apresentar um alert javascript com sucesso, limpar todos os c
 do formulário e zerar a barra de progresso novamente.
 */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [maritalStatus, setMaritalStatus] = useState("");
   const [gender, setGender] = useState("");
-  const [statusBarPercent, setStatusBarPercent] = useState(0);
-
-  useEffect(() => {
-    const fields = [name, email, maritalStatus, gender];
-
-    const newStatusBarPercent = fields.reduce((percent, field) => {
-      if (field.length !== 0) return percent + 25;
-
-      return percent;
-    }, 0);
-
-    setStatusBarPercent(newStatusBarPercent);
-  }, [name, email, maritalStatus, gender]);
 
   function reset() {
     setName("");
@@ -90,13 +77,19 @@ function App() {
     reset();
   }
 
+  const fields = [name, email, maritalStatus, gender];
+  const statusBarPercent = fields.reduce((percent, field) => {
+    if (field.length !== 0) return percent + 25;
+
+    return percent;
+  }, 0);
+
   return (
     <div className="App">
       <h3>desafio fernandev</h3>
       <h1>progresso do formulário</h1>
 
       <main>
-        {/* crie a barra de progresso aqui */}
         <div className="bar-container">
           <div className="bar" style={{ width: `${statusBarPercent}%` }}></div>
         </div>
