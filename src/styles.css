@@ -4,7 +4,7 @@
   line-height: 24px;
   font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: light;
   background: #eee;
   color: #242424;
 
@@ -66,13 +66,13 @@ button {
 }
 .bar {
   background: #535bf2;
-  width: 100px;
+  width: 0%;
   height: 100%;
 }
 label {
   margin-bottom: 5px;
 }
-input:not([type='radio']),
+input:not([type="radio"]),
 select {
   height: 40px;
   width: 100%;
@@ -102,6 +102,7 @@ button:active {
   color: white;
 }
 button:disabled {
+  cursor: not-allowed;
   color: #aaa;
 }
 button:disabled:hover {

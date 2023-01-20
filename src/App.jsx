@@ -35,7 +35,61 @@ Ao enviar, deve-se apresentar um alert javascript com sucesso, limpar todos os c
 do formulário e zerar a barra de progresso novamente.
 */
 
+import { useEffect, useState } from "react";
+
 function App() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [maritalStatus, setMaritalStatus] = useState("");
+  const [gender, setGender] = useState("");
+  const [statusBarPercent, setStatusBarPercent] = useState(0);
+
+  useEffect(() => {
+    const fields = [name, email, maritalStatus, gender];
+
+    const newStatusBarPercent = fields.reduce((percent, field) => {
+      if (field.length !== 0) return percent + 25;
+
+      return percent;
+    }, 0);
+
+    setStatusBarPercent(newStatusBarPercent);
+  }, [name, email, maritalStatus, gender]);
+
+  function reset() {
+    setName("");
+    setEmail("");
+    setMaritalStatus("");
+    setGender("");
+    setStatusBarPercent(0);
+  }
+
+  function validateName(name) {
+    const regex = /^[A-Za-z]+\s[A-Za-z]+([\s][A-Za-z]+)*$/;
+    return regex.test(name);
+  }
+
+  function validateEmail(email) {
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(email);
+  }
+
+  function isValidateFields() {
+    return (
+      gender.length !== 0 &&
+      maritalStatus.length !== 0 &&
+      validateEmail(email) &&
+      validateName(name)
+    );
+  }
+
+  function handleSubmit() {
+    alert("Formulário enviado com sucesso!");
+
+    reset();
+  }
+
   return (
     <div className="App">
       <h3>desafio fernandev</h3>
@@ -43,17 +97,32 @@ function App() {
 
       <main>
         {/* crie a barra de progresso aqui */}
-        <div className="form-group">
-          <label htmlFor="">Nome Completo</label>
-          <input />
+        <div className="bar-container">
+          <div className="bar" style={{ width: `${statusBarPercent}%` }}></div>
         </div>
         <div className="form-group">
-          <label htmlFor="">E-mail</label>
-          <input />
+          <label htmlFor="name">Nome Completo</label>
+          <input
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
         <div className="form-group">
-          <label htmlFor="">Estado Civil</label>
-          <select>
+          <label htmlFor="email">E-mail</label>
+          <input
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="marital-status">Estado Civil</label>
+          <select
+            id="marital-status"
+            value={maritalStatus}
+            onChange={(e) => setMaritalStatus(e.target.value)}
+          >
             <option value="">- selecione...</option>
             <option value="solteiro">Solteiro</option>
             <option value="casado">Casado</option>
@@ -64,14 +133,30 @@ function App() {
           <label htmlFor="">Gênero</label>
           <div className="radios-container">
             <span>
-              <input type="radio" /> Masculino
+              <input
+                name="gender"
+                type="radio"
+                value="Masculino"
+                checked={gender === "Masculino"}
+                onChange={(e) => setGender(e.target.value)}
+              />
+              Masculino
             </span>
             <span>
-              <input type="radio" /> Feminino
+              <input
+                name="gender"
+                type="radio"
+                value="Feminino"
+                checked={gender === "Feminino"}
+                onChange={(e) => setGender(e.target.value)}
+              />
+              Feminino
             </span>
           </div>
         </div>
-        <button>Enviar Formulário</button>
+        <button onClick={handleSubmit} disabled={!isValidateFields()}>
+          Enviar Formulário
+        </button>
       </main>
     </div>
   );
